@@ -39,14 +39,18 @@ class Boy:
 
 class Ball:
     def __init__(self):
-        self.x,self.y = random.randint(50,750),350
-        self.spd = random.randint(2,10)
+        self.elapsedtime = 0
+        self.x,self.y = random.randint(50,750),600
+        self.spd = random.randint(2,5)
         self.image = load_image('ball.png')
+        self.down=0
 
     def update(self):
-        self.y -= self.spd
+        self.y -= self.spd+(self.elapsedtime*3)
+        self.elapsedtime=self.elapsedtime+1
         if self.y <= 62:
-            self.spd = 0
+            self.spd=-40
+            self.elapsedtime=0
 
     def draw(self):
         self.image.draw(self.x,self.y)
@@ -84,7 +88,7 @@ while running:
 
     update_canvas()
 
-    delay(0.05)
+    delay(0.02)
 
 #종료 코드
 close_canvas()
