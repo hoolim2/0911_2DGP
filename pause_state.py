@@ -3,13 +3,13 @@ import main_state
 from pico2d import *
 
 
-name = "TitleState"
+name = "Pause state"
 image = None
 
 
 def enter():
     global image
-    image = load_image('title.png')
+    image = load_image('Pause_image.jpg')
     pass
 
 
@@ -28,7 +28,7 @@ def handle_events():
             if (event.type,event.key) ==(SDL_KEYDOWN,SDLK_ESCAPE):
                 game_framework.quit()
             elif (event.type,event.key) ==(SDL_KEYDOWN,SDLK_SPACE) :
-                game_framework.change_state(main_state)
+                game_framework.push_state(main_state)
     pass
 
 
@@ -54,9 +54,3 @@ def pause():
 
 def resume():
     pass
-
-
-
-
-
-

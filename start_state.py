@@ -28,7 +28,7 @@ def update():
     if(logo_time > 1.0):
         logo_time =0
         #game_framework.quit()
-        game_framework.change_state(title_state)
+        game_framework.push_state(title_state)
     delay(0.01)
     logo_time += 0.01
     pass
