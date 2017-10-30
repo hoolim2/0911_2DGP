@@ -24,10 +24,13 @@ class Grass:
 
 
 class Boy:
+    image = None
+
     def __init__(self):
         self.x,self.y = random.randint(100,500),90
         self.frame = random.randint(0,7)
-        self.image = load_image('boy.png')
+        if Boy.image == None:
+            Boy.image = load_image('boy.png')
 
     def update(self):
         self.frame = (self.frame +1)% 8
@@ -49,7 +52,8 @@ class Ball:
         self.y -= self.spd+(self.elapsedtime*3)
         self.elapsedtime=self.elapsedtime+1
         if self.y <= 62:
-            self.spd=-40
+            self.y = 62
+            self.spd=-self.spd*0.1
             self.elapsedtime=0
 
     def draw(self):
@@ -60,7 +64,7 @@ class Ball:
 
 open_canvas()
 
-team = [Boy() for i in range(11)]
+team = [Boy() for i in range(1000)]
 ball_group = [Ball() for i in range(20)]
 grass = Grass()
 
@@ -88,7 +92,7 @@ while running:
 
     update_canvas()
 
-    delay(0.02)
+    delay(0.01)
 
 #종료 코드
 close_canvas()

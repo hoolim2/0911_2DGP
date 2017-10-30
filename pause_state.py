@@ -3,13 +3,20 @@ import main_state
 from pico2d import *
 
 
-name = "Pause state"
+name = "PauseState"
 image = None
 
 
+class Pause:
+    def __init__(self):
+        self.image = load_image('pause.png')
+
+    def draw(self):
+        self.image.draw(400,300)
+
 def enter():
     global image
-    image = load_image('Pause_image.jpg')
+    image = load_image('pause.png')
     pass
 
 
@@ -25,10 +32,8 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         else:
-            if (event.type,event.key) ==(SDL_KEYDOWN,SDLK_ESCAPE):
-                game_framework.quit()
-            elif (event.type,event.key) ==(SDL_KEYDOWN,SDLK_SPACE) :
-                game_framework.push_state(main_state)
+            if (event.type,event.key) ==(SDL_KEYDOWN,SDLK_p):
+                game_framework.pop_state()
     pass
 
 

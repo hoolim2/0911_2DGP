@@ -46,14 +46,6 @@ class Boy:
     def draw(self):
         self.image.clip_draw(self.frame * 100, 0, 100, 100, self.x, self.y)
 
-
-class Pause:
-    def __init__(self):
-        self.image = load_image('pause.png')
-
-    def draw(self):
-        self.image.draw(400,300)
-
 def enter():
     global boy,grass
     boy = Boy()
@@ -103,10 +95,12 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.change_state(title_state)
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_p and pausecheck == False:
-            pause()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_p and pausecheck == True:
-            resume()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_p:
+            game_framework.push_state(PauseState)
+#       elif event.type == SDL_KEYDOWN and event.key == SDLK_p and pausecheck == False:
+#            pause()
+#       elif event.type == SDL_KEYDOWN and event.key == SDLK_p and pausecheck == True:
+#           resume()
     pass
 
 
