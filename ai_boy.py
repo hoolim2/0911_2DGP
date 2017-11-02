@@ -4,15 +4,25 @@ from pico2d import *
 
 # 게임 오브젝트 클래스의 정의를 여기에
 
+spacedown=False
+statestarter=False
 
 def handle_events():
     global running
+    global spacedown
+    global statestarter
     events = get_events()
     for evevt in events:
         if evevt.type == SDL_QUIT:
             running = False
         elif evevt.type == SDL_KEYDOWN and evevt.key == SDLK_ESCAPE:
             running = False
+
+        elif evevt.type == SDL_KEYDOWN and evevt.key == SDLK_SPACE:
+            spacedown = True
+            statestarter=True
+        elif evevt.type == SDL_KEYUP and evevt.key == SDLK_SPACE:
+            spacedown = False
 
 
 class Grass:
@@ -24,6 +34,7 @@ class Grass:
 
 
 class Boy:
+
     image = None
 
     run_frames=0
@@ -38,12 +49,11 @@ class Boy:
         if Boy.image == None:
             Boy.image = load_image('animation_sheet.png')
 
-    def update(self):
-        self.frame=(self.frame+1 )%8
-        self.handle_state[self.state](self)
-
     def handle_left_run(self):
-        self.x -= 5
+        if(spacedown == False):
+            self.x -= 5
+        else:
+            self.x -= 20
         self.run_frames += 1
         if self.x < 0:
             self.state = self.RIGHT_RUN
@@ -53,27 +63,49 @@ class Boy:
             self.stand_frames = 0
 
     def handle_left_stand(self):
+        global statestarter
         self.stand_frames+=1
+
+        if(statestarter==True):
+            print("run")
+            self.state = self.LEFT_RUN
+            self.run_frames = 0
+            statestarter = False
+
+
         if self.stand_frames ==50:
             self.state =self.LEFT_RUN
             self.run_frames =0
 
+
     def handle_right_run(self):
-        self.x += 5
+        if (spacedown == False):
+            self.x += 5
+        else:
+            self.x += 20
         self.run_frames += 1
         if self.x > 800:
             self.state = self.LEFT_RUN
             self.x = 800
         if self.run_frames == 100:
-            self.state = self.RIGHT_RUN
+            self.state = self.RIGHT_STAND
             self.stand_frames = 0
 
     def handle_right_stand(self):
+        global statestarter
         self.stand_frames += 1
+
+        if (statestarter == True):
+            print("run")
+            self.state = self.RIGHT_RUN
+            self.run_frames = 0
+            statestarter = False
 
         if self.stand_frames == 50:
              self.state = self.RIGHT_RUN
              self.run_frames = 0
+
+#    def
 
     handle_state = {
         LEFT_RUN: handle_left_run,
@@ -81,6 +113,14 @@ class Boy:
         LEFT_STAND: handle_left_stand,
         RIGHT_STAND: handle_right_stand
     }
+
+
+    def update(self):
+        global statestarter
+        self.frame=(self.frame+1 )%8
+        self.handle_state[self.state](self)
+        statestarter = False
+
 
     def draw(self):
         self.image.clip_draw(self.frame*100,self.state*100,100,100,self.x,self.y)
@@ -112,40 +152,42 @@ class Ball:
 
 
 
-#초기화 코드
 
 
-open_canvas()
+def main():
+    # 초기화 코드
+    open_canvas()
 
-team = [Boy() for i in range(12)]
-ball_group = [Ball() for i in range(20)]
-grass = Grass()
+    boy=Boy()
+    ball_group = [Ball() for i in range(20)]
+    grass = Grass()
 
-running = True
+    running = True
 
-#게임 루프 코드
+    #게임 루프 코드
 
-while running:
-    handle_events()
+    while running:
+        handle_events()
 
-    for boy in team:
         boy.update()
 
-    for ball in ball_group:
-        ball.update()
+        for ball in ball_group:
+            ball.update()
 
-    clear_canvas()
-    grass.draw()
+        clear_canvas()
+        grass.draw()
 
-    for boy in team:
         boy.draw()
 
-    for ball in ball_group:
-        ball.draw()
+        for ball in ball_group:
+            ball.draw()
 
-    update_canvas()
+        update_canvas()
 
-    delay(0.01)
+        delay(0.01)
 
-#종료 코드
-close_canvas()
+    #종료 코드
+    close_canvas()
+
+if __name__ == '__main__':
+    main()
