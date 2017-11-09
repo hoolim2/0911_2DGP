@@ -1,4 +1,4 @@
-# json_players.py : load player data from .json file
+# get_frame_time_rate : measure frame time and frame rate
 
 import random
 import json
@@ -99,7 +99,7 @@ def create_team():
         "LEFT_STAND": Boy.LEFT_STAND,
         "RIGHT_STAND": Boy.RIGHT_STAND
     }
-#    team_data = json.loads(team_data_text)
+    #    team_data = json.loads(team_data_text)
 
     team_data_file = open('team_data.txt', 'r')
     team_data = json.load(team_data_file)
@@ -108,15 +108,17 @@ def create_team():
     team = []
     for name in team_data:
         player = Boy()
-        player.name =name
+        player.name = name
         player.x = team_data[name]['x']
-        player.y=team_data[name]['y']
-        player.state=player_state_table[team_data[name]['StartState']]
+        player.y = team_data[name]['y']
+        player.state = player_state_table[team_data[name]['StartState']]
         team.append(player)
 
     return team
 
 
+TARGET_FPS = 60.0
+TARGET_FRAME_TIME = 1.0 / TARGET_FPS
 
 def main():
 
@@ -130,19 +132,30 @@ def main():
     grass = Grass()
 
     running = True
-    while running:
-        handle_events()
 
+    # fill here
+    current_time = get_time()
+
+    while running:
+        # Game Logic
+        handle_events()
         for player in team:
             player.update()
 
+        # Game Rendering
         clear_canvas()
         grass.draw()
         for player in team:
             player.draw()
         update_canvas()
 
-        delay(0.05)
+        #fill here
+        frame_time = get_time() - current_time
+        frame_rate = 1.0/frame_time
+        print("Frame Rate: %f fps, Frame Time : %f sec, "%(frame_rate,frame_time))
+
+        current_time += frame_time
+
 
     close_canvas()
 
