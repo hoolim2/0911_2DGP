@@ -38,15 +38,16 @@ class BigBall(Ball):
         if(self.balls_stop==False):
             self.fall_speed += 14
 
-    def stop(self):
-        if (self.fall_speed < 70):
-            self.fall_speed = 0
-            self.balls_stop=True
-        elif(self.fall_speed>=70):
-            self.y=70
-            self.fall_speed= -self.fall_speed*0.6
-
-
+    def stop(self,stoprange,brickX):
+        if(stoprange==240):
+            self.x += brickX
+            print(self.x)
+        self.y = stoprange
+        self.fall_speed = 0
+        self.balls_stop=True
 
     def get_bb(self):
         return self.x -20, self.y - 20, self.x + 20, self.y +20
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())

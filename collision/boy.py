@@ -23,6 +23,9 @@ class Boy:
         self.life_time = 0.0
         self.total_frames = 0.0
         self.dir = 0
+        self.jumpdir=300
+        self.Jump = False
+        self.boystop=False
         self.state = self.RIGHT_STAND
         if Boy.image == None:
             Boy.image = load_image('animation_sheet.png')
@@ -40,6 +43,23 @@ class Boy:
 
         self.x = clamp(0, self.x, 800)
 
+        if(self.Jump ==True):
+            self.boystop = False
+            self.y +=self.jumpdir*frame_time
+            self.jumpdir-=200*frame_time
+
+    def stop(self,stoprange,brickX,brickcollide):
+        self.brickcollide = brickcollide
+        self.boystop = True
+        if (self.brickcollide== True):
+            self.Jump = False
+            self.x += brickX
+            self.y = stoprange
+        if (self.brickcollide==False or self.Jump==False):
+            self.Jump = False
+            self.y = stoprange
+            self.jumpdir = 300
+
 
     def draw(self):
         self.image.clip_draw(self.frame * 100, self.state * 100, 100, 100, self.x, self.y)
@@ -51,6 +71,7 @@ class Boy:
         draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
+        global brickcollide
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
             if self.state in (self.RIGHT_STAND, self.LEFT_STAND, self.RIGHT_RUN):
                 self.state = self.LEFT_RUN
@@ -67,7 +88,8 @@ class Boy:
             if self.state in (self.RIGHT_RUN,):
                 self.state = self.RIGHT_STAND
                 self.dir = 0
-
+        if (event.type, event.key) == (SDL_KEYDOWN,SDLK_SPACE):
+                self.Jump=True
 
 
 

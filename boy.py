@@ -64,8 +64,3 @@ class Boy:
             if self.state in (self.RIGHT_RUN,):
                 self.state = self.RIGHT_STAND
                 self.dir = 0
-
-
-
-
-
